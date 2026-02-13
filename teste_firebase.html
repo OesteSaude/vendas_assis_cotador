@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste de Regras Firebase</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2 { color: #333; }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success { background: #e8f5e9; color: #2e7d32; }
+        .error { background: #ffebee; color: #c62828; }
+        .info { background: #e3f2fd; color: #1976d2; }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover { background: #5568d3; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🔐 Teste de Regras de Segurança</h2>
+        
+        <div id="statusAuth" class="status info">
+            👤 Status: Não autenticado
+        </div>
+
+        <h3>Login de Teste</h3>
+        <input type="email" id="email" placeholder="E-mail">
+        <input type="password" id="senha" placeholder="Senha">
+        <button id="btnLogin">Fazer Login</button>
+        <button id="btnLogout" disabled>Fazer Logout</button>
+
+        <div id="resultado" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7QXiEfzMqbO_kqyz28nrhvdtHMWfMiYM",
+            authDomain: "sistema-assis.firebaseapp.com",
+            databaseURL: "https://sistema-assis-default-rtdb.firebaseio.com",
+            projectId: "sistema-assis",
+            storageBucket: "sistema-assis.firebasestorage.app",
+            messagingSenderId: "359044378563",
+            appId: "1:359044378563:web:eab4648e6caa06335d5776",
+            measurementId: "G-Q34B1QCJ4T"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        const statusAuth = document.getElementById('statusAuth');
+        const resultado = document.getElementById('resultado');
+        const btnLogin = document.getElementById('btnLogin');
+        const btnLogout = document.getElementById('btnLogout');
+        const inputEmail = document.getElementById('email');
+        const inputSenha = document.getElementById('senha');
+
+        // Monitora estado de autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                statusAuth.className = 'status success';
+                statusAuth.innerHTML = `✅ Logado como: ${user.email}`;
+                btnLogin.disabled = true;
+                btnLogout.disabled = false;
+                
+                testarRegras(user.uid);
+            } else {
+                statusAuth.className = 'status info';
+                statusAuth.innerHTML = '👤 Status: Não autenticado';
+                btnLogin.disabled = false;
+                btnLogout.disabled = true;
+                resultado.innerHTML = '';
+            }
+        });
+
+        // Login
+        btnLogin.onclick = () => {
+            const email = inputEmail.value;
+            const senha = inputSenha.value;
+
+            if (!email || !senha) {
+                alert('Preencha email e senha!');
+                return;
+            }
+
+            resultado.innerHTML = '<div class="status info">⏳ Fazendo login...</div>';
+
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(() => {
+                    resultado.innerHTML = '<div class="status success">✅ Login realizado!</div>';
+                })
+                .catch((error) => {
+                    resultado.innerHTML = `<div class="status error">❌ Erro: ${error.message}</div>`;
+                });
+        };
+
+        // Logout
+        btnLogout.onclick = () => {
+            auth.signOut();
+        };
+
+        // Testa regras
+        function testarRegras(uid) {
+            resultado.innerHTML = '<div class="status info">⏳ Testando regras de segurança...</div>';
+
+            const refUser = database.ref(`users/${uid}`);
+            const refCotacoes = database.ref(`cotacoes/${uid}`);
+
+            let testes = '';
+
+            // Teste 1: Ler dados do próprio usuário
+            refUser.once('value')
+                .then((snapshot) => {
+                    testes += '<div class="status success">✅ Leitura de users/{meu-uid} - PERMITIDO</div>';
+                    atualizar();
+                })
+                .catch((error) => {
+                    testes += `<div class="status error">❌ Leitura de users/{meu-uid} - NEGADO<br>${error.message}</div>`;
+                    atualizar();
+                });
+
+            // Teste 2: Escrever dados do próprio usuário
+            refUser.set({
+                nome: 'Teste',
+                email: auth.currentUser.email,
+                timestamp: Date.now()
+            })
+                .then(() => {
+                    testes += '<div class="status success">✅ Escrita em users/{meu-uid} - PERMITIDO</div>';
+                    atualizar();
+                })
+                .catch((error) => {
+                    testes += `<div class="status error">❌ Escrita em users/{meu-uid} - NEGADO<br>${error.message}</div>`;
+                    atualizar();
+                });
+
+            // Teste 3: Escrever cotação
+            refCotacoes.push({
+                teste: true,
+                timestamp: Date.now()
+            })
+                .then(() => {
+                    testes += '<div class="status success">✅ Escrita em cotacoes/{meu-uid} - PERMITIDO</div>';
+                    atualizar();
+                })
+                .catch((error) => {
+                    testes += `<div class="status error">❌ Escrita em cotacoes/{meu-uid} - NEGADO<br>${error.message}</div>`;
+                    atualizar();
+                });
+
+            // Teste 4: Tentar ler dados de outro usuário (deve falhar)
+            database.ref('users/outro-usuario-qualquer').once('value')
+                .then(() => {
+                    testes += '<div class="status error">⚠️ Leitura de users/{outro-uid} - PERMITIDO (PROBLEMA DE SEGURANÇA!)</div>';
+                    atualizar();
+                })
+                .catch((error) => {
+                    testes += '<div class="status success">✅ Leitura de users/{outro-uid} - NEGADO (correto!)</div>';
+                    atualizar();
+                });
+
+            function atualizar() {
+                resultado.innerHTML = '<h3>Resultados dos Testes:</h3>' + testes;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+/* ============================================================================
+   MODAL DE ONBOARDING - OESTE SAÚDE ASSIS
+   ============================================================================ */
+
+/* Overlay (fundo escuro) */
+.onboarding-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    padding: 20px;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-in-out;
+    justify-content: center;
+    align-items: center;
+}
+
+.onboarding-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container do modal */
+.onboarding-content {
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 850px;
+    width: 100%;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: slideUp 0.4s ease-out;
+    pointer-events: auto;
+}
+
+.onboarding-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    color: white;
+    font-size: 1.2rem;
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+}
+
+.onboarding-close:hover {
+    background: white;
+    color: #003D58;
+    transform: rotate(90deg);
+}
+
+/* ✅ HEADER - AZUL-ESCURO PADRÃO (SEM ROXO!) */
+.onboarding-header {
+    text-align: center;
+    padding: 50px 40px 30px;
+    background: linear-gradient(135deg, #003D58 0%, #00758C 100%);
+    border-radius: 20px 20px 0 0;
+    color: white;
+}
+
+.onboarding-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.onboarding-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.onboarding-subtitle {
+    font-size: 1rem;
+    opacity: 0.95;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Body */
+.onboarding-body {
+    padding: 40px;
+}
+
+/* Seção do vídeo */
+.onboarding-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ✅ ÍCONE DO TÍTULO - AZUL-ESCURO PADRÃO */
+.section-title i {
+    color: #00758C;
+    font-size: 1.3rem;
+}
+
+/* Container do vídeo (aspect ratio 16:9) */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    background: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* Cards de recursos */
+.onboarding-resources {
+    display: grid;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.resource-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ✅ BARRA LATERAL DO CARD - AZUL-ESCURO PADRÃO */
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #003D58 0%, #00758C 100%);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.resource-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 6px 25px rgba(0, 117, 140, 0.25);
+}
+
+.resource-card:hover::before {
+    transform: scaleY(1);
+}
+
+/* ✅ ÍCONE DO CARD - AZUL-ESCURO PADRÃO (SEM ROXO!) */
+.resource-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #003D58 0%, #00758C 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 61, 88, 0.3);
+}
+
+/* ✅ WHATSAPP - AZUL-ESCURO PADRÃO (SEM VERDE!) */
+.resource-icon-box.whatsapp {
+    background: linear-gradient(135deg, #003D58 0%, #00758C 100%);
+    box-shadow: 0 4px 10px rgba(0, 117, 140, 0.3);
+}
+
+.resource-content {
+    flex: 1;
+}
+
+.resource-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.resource-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+/* ✅ SETA DO CARD - AZUL-ESCURO PADRÃO */
+.resource-arrow {
+    font-size: 1.2rem;
+    color: #00758C;
+    transition: transform 0.3s ease;
+}
+
+.resource-card:hover .resource-arrow {
+    transform: translateX(5px);
+}
+
+/* Footer */
+.onboarding-footer {
+    padding: 30px 40px;
+    background: #f8f9fa;
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Checkbox customizado */
+.onboarding-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ✅ CHECKBOX - AZUL-ESCURO PADRÃO */
+.onboarding-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    accent-color: #00758C;
+}
+
+.checkbox-text {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* ✅ BOTÃO COMEÇAR - AZUL-ESCURO PADRÃO (SEM ROXO!) */
+.btn-comecar {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #003D58 0%, #00758C 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 61, 88, 0.3);
+}
+
+.btn-comecar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 117, 140, 0.4);
+    background: linear-gradient(135deg, #00758C 0%, #003D58 100%);
+}
+
+.btn-comecar:active {
+    transform: translateY(0);
+}
+
+.btn-comecar i {
+    transition: transform 0.3s ease;
+}
+
+.btn-comecar:hover i {
+    transform: translateX(5px);
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================================================================
+   RESPONSIVO
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .onboarding-content {
+        border-radius: 16px;
+        max-height: 90vh;
+    }
+    
+    .onboarding-header {
+        padding: 40px 25px 25px;
+    }
+    
+    .onboarding-icon {
+        font-size: 3rem;
+    }
+    
+    .onboarding-title {
+        font-size: 1.4rem;
+    }
+    
+    .onboarding-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .onboarding-body {
+        padding: 25px;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .resource-card {
+        padding: 15px;
+    }
+    
+    .resource-icon-box {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        margin-right: 15px;
+    }
+    
+    .resource-title {
+        font-size: 1rem;
+    }
+    
+    .resource-description {
+        font-size: 0.85rem;
+    }
+    
+    .onboarding-footer {
+        padding: 20px 25px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-comecar {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .onboarding-overlay {
+        padding: 10px;
+    }
+    
+    .onboarding-close {
+        top: 15px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .onboarding-header {
+        padding: 35px 20px 20px;
+    }
+    
+    .onboarding-icon {
+        font-size: 2.5rem;
+    }
+    
+    .onboarding-title {
+        font-size: 1.2rem;
+    }
+    
+    .onboarding-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .onboarding-body {
+        padding: 20px;
+    }
+}

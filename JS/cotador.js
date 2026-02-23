@@ -342,17 +342,17 @@ function obterImagemPlano(planosArray) {
     // Mapeamento de COMBINAÇÕES para URLs do Imgur
     const imagensCombinacoes = {
         // ===== PLANOS INDIVIDUAIS =====
-        'Premium II': 'https://i.imgur.com/LINK_APENAS_II.png',
-        'Premium III': 'https://i.imgur.com/LINK_APENAS_III.png',
-        'Premium IV': 'https://i.imgur.com/LINK_APENAS_IV.png',
+        'Premium II': 'https://i.imgur.com/aUUu4iO.jpeg',
+        'Premium III': 'https://i.imgur.com/MxdP9Lg.jpeg',
+        'Premium IV': 'https://i.imgur.com/TqOF1C2.jpeg',
         
         // ===== COMBINAÇÕES DE 2 PLANOS =====
-        'Premium II + Premium III': 'https://i.imgur.com/LINK_II_E_III.png',
-        'Premium II + Premium IV': 'https://i.imgur.com/LINK_II_E_IV.png',
-        'Premium III + Premium IV': 'https://i.imgur.com/LINK_III_E_IV.png',
+        'Premium II + Premium III': 'https://i.imgur.com/aO3VEg6.jpeg',
+        'Premium II + Premium IV': 'https://i.imgur.com/xgbONl9.jpeg',
+        'Premium III + Premium IV': 'https://i.imgur.com/byh0gqr.jpeg',
         
         // ===== COMBINAÇÃO DE 3 PLANOS =====
-        'Premium II + Premium III + Premium IV': 'https://i.imgur.com/LINK_II_III_IV.png'
+        'Premium II + Premium III + Premium IV': 'https://i.imgur.com/eDsJiXS.jpeg'
     };
     
     const urlImagem = imagensCombinacoes[chave] || null;
@@ -590,5 +590,6 @@ if (document.readyState === 'loading') {
     // DOM já está pronto
     inicializarSistema();
 }
+
 
 console.log('%c✅ [ASSIS] cotador.js carregado', 'color: #16a34a; font-weight: bold;');
